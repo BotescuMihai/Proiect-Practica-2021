@@ -1,5 +1,7 @@
 import sys, socket
 import echo_util
+from facebook import *
+from facebook_funcs import *
 
 
 HOST = sys.argv[-1] if len(sys.argv) > 1 else '127.0.0.1'
@@ -15,29 +17,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print('\nConnected to {}:{}'.format(HOST, PORT))
-    print("Type message, enter to send, 'q' to quit")
-
-    while True:
-        print("Available commands: getid ...")
-        msg = input()
-        if not msg:
-            continue
-
-        if msg == 'q': break
-        try:
-            echo_util.send_msg(sock, msg) # Blocks until sent
-            print('Sent message: {}'.format(msg))
-            msg = echo_util.recv_msg(sock)
-            # Block until
-            # received complete
-            # message
-            print('Received echo: ' + msg)
-        except ConnectionError:
-            print('Socket error during communication')
-            sock.close()
-            print('Closed connection to server\n')
-            break
-
-    print("Closing connection")
+    o = main_menu()
+    echo_util.send_msg(sock,str(o))
+  #  print("Closing connection")
     sock.close()
 
